@@ -7,7 +7,7 @@ namespace NRoelfs_Doc.Helpers;
 /// Wrapper for styled console Outputs.
 /// </summary>
 public struct Printer {
-    /// <summar>
+    /// <summary>
     /// Represents an indent for console output.
     /// <para> \t was to big for a small readable output.</para>
     /// </summary>

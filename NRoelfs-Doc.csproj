@@ -6,6 +6,11 @@
     <RootNamespace>NRoelfs_Doc</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.13.0" />
+  </ItemGroup>
 
 </Project>

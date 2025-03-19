@@ -5,7 +5,7 @@ namespace NRoelfs_Doc;
 
 internal static class Scan {
 
-    static readonly String[] OPTIONS = new String[] {
+    public static readonly String[] OPTIONS = new String[] {
         "--scan",
         "-s"
     };
@@ -74,6 +74,7 @@ internal static class Scan {
                 PrintDir(subDir,++indent, verbose);
                 indent--;
             }
+
         }
     }
 
