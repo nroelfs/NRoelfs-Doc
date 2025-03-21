@@ -91,6 +91,7 @@ internal static class Scan {
             if(ignore == null) ignore = new();
             int ignoreIndex = args.ToList().FindIndex(arg => Ignore.OPTIONS.Contains(arg));
             ignore.GetIgnoreList(args[ignoreIndex + 1]);
+
         }
     }
 }

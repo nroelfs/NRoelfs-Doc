@@ -45,6 +45,9 @@ internal class Ignore {
     }
 
     internal bool IsIgnored(string file) {
-        return _igorelist.Contains(file);
+        if(String.IsNullOrEmpty(file)) return false;
+        if(!file.StartsWith("/")) file = "/" + file;
+        bool isIgnored = _igorelist.Contains(file) || _igorelist.Any(x => file.Contains(x));
+        return isIgnored;
     }
 }

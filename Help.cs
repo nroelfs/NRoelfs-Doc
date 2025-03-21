@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using NRoelfs_Doc.Helpers;
 namespace NRoelfs_Doc;
 
@@ -18,7 +17,7 @@ internal static class Help
         { new[] {"--dir", "-d"}, "Specifies the directory to scan." },
         { new[] {"-output", "-o"}, "Specifies the directory for the output." },
         { new[] {"-i", "--info"}, "Displays information about the program." },
-        { new[] {"-s, --scan"}, "Scans the specified directory for files and prints a report"},
+        { new[] {"-s,", "--scan"}, "Scans the specified directory for files and prints a report"},
         { new[] {"-I", "--ignore"}, "Allows you to ignore certain files or directories during the scan.\n Can Get a Blacklist of files or directories to ignore., also accepts a .gitognore file or comma separated list of files or directories."},
         { new[] {"-n", "--name"}, "Specifies the name of the output file." },
     };

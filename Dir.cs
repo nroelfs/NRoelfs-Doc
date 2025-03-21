@@ -4,54 +4,70 @@ namespace NRoelfs_Doc;
 
 internal static class Dir {
 
+    static Ignore _ignore = new Ignore();
+    static DirectoryInfo? _directory;
+    static ICollection<DirectoryInfo> _directories = new List<DirectoryInfo>();
+    static readonly String[] AcceptedExtensions = new String[] {
+        ".cs",
+    };
+    static ICollection<FileInfo> _files = new List<FileInfo>();
     public static String[] OPTIONS = new String[] {
         "--dir",
         "-d"
     };
+
+
+    /// <summary>
+    /// Handles the directory options.
+    /// </summary>
+    /// <param name="args"></param>
+    /// <param name="verbose"></param>
     public static void Handle(String[] args, bool verbose = false) {
-        ExportTypeHelper dth = new();
-        String? XMLDoc = _ExtractFilePath(args[args.ToList().FindIndex(arg => OPTIONS.Contains(arg)) + 1]);
+        buildIgoreList(args, verbose);
+        int index = args.ToList().FindIndex(arg => OPTIONS.Contains(arg));
+        _directory = new DirectoryInfo(args[index + 1]);
+        getFiles(verbose);
     }
 
-    #region Extracting From .XML Documentation
-     /// <summary>
-    /// Extracts the XML documentation file from the specified directory.
+
+    /// <summary>
+    /// responsible for building the ignore list.
     /// </summary>
-    /// <param name="directory"></param>
+    /// <param name="args"></param>
     /// <param name="verbose"></param>
-    /// <returns></returns>
-    private static String? _ExtractFilePath(String directory, bool verbose = false){
-        if(verbose) Printer.Println($"Extracting Project Name from {directory}...");
-        String projectName = new DirectoryInfo(directory).GetFiles("*.csproj").First().Name.Replace(".csproj", "");
-        return _FindXML(directory, projectName, verbose);
+    private static void buildIgoreList(String[] args, bool verbose = false){
+        if(verbose) {
+            Printer.Println("Building ignore list...");
+        }
+        if(args.Any(x => Ignore.OPTIONS.Contains(x))) {
+            if(_ignore == null) _ignore = new();
+            int ignoreIndex = args.ToList().FindIndex(arg => Ignore.OPTIONS.Contains(arg));
+            _ignore.GetIgnoreList(args[ignoreIndex + 1]);
+        }
     }
 
     /// <summary>
-    /// Finds the XML documentation file in the specified directory.
+    /// Gets the files from the directory.
     /// </summary>
-    /// <param name="directoryInfo"></param>
-    /// <param name="projectName"></param>
     /// <param name="verbose"></param>
-    /// <returns></returns>
-    private static String? _FindXML(String directoryInfo, string projectName, bool verbose = false){
-        DirectoryInfo dir = new DirectoryInfo(directoryInfo);
-        if(!dir.Exists) {
-            Printer.Println($"Directory {dir.FullName} does not exist.");
+    private static void getFiles(bool verbose = false) {
+        if(verbose) {
+            Printer.Println("Getting files...");
+        }
+        if(_directory == null) {
+            Printer.Println("Directory not set.");
             Environment.Exit(1);
         }
+        _files = _directory
+                .GetFiles(AcceptedExtensions, SearchOption.AllDirectories, verbose)
+                .Where(x => !_ignore.IsIgnored(x.FullName))
+                .ToArray();
         if(verbose) {
-            Printer.Println($"Searching for XML documentation file in {dir.FullName}...");
+            Printer.Println($"Apply Filter for Ignored Files\nFiles Found: {_files.Count}");
         }
-        FileInfo? file = dir.GetFiles($"{projectName}.xml", SearchOption.AllDirectories).FirstOrDefault();
-        if(verbose) {
-            if(file != null) {
-                Printer.Println($"Found XML documentation file: {file.FullName}");
-            } else {
-                Printer.Println($"No XML documentation file found in {dir.FullName}.");
-            }
+        if(_files.Count == 0) {
+            Printer.Println($"Directory {_directory.FullName} is empty.");
+            Environment.Exit(1);
         }
-        return file?.FullName;
     }
-
-    #endregion
 }

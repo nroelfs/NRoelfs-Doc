@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/bin/Debug/net8.0/NRoelfs-Doc.dll",
-            "args": ["-d", "./"],
+            "args": ["-d", "./", "-I" ,"./.gitignore", "-v"],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false
